@@ -61,8 +61,8 @@ fun SecondScreen(){
 @Composable
 fun InputContent(modifier: Modifier){
     val radioOption = listOf(
-        "Deposit",
-        "Withdraw"
+        stringResource(id = R.string.deposit),
+        stringResource(id = R.string.withdraw)
     )
 
     var type by remember { mutableStateOf(radioOption[0]) }
