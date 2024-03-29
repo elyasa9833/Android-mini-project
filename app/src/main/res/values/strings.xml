@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Monefy Safe</string>
+    <string name="teks_x">Jumlah Uang: %1$d \nKeterangan: %2$s \nTipe Transaksi: %3$s</string>
 </resources>
