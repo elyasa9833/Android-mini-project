@@ -4,6 +4,11 @@
     <string name="deposit">Deposit</string>
     <string name="withdraw">Withdraw</string>
     <string name="kembali">Kembali</string>
+    <string name="jumlah">Jumlah</string>
+    <string name="keterangan">Keterangan (opsional)</string>
+    <string name="leadIcon">Rp. </string>
+    <string name="jumlah_error">Data tidak boleh kosong</string>
+    <string name="invalid_input">Data tidak boleh kosong</string>
     <string name="tambah_transaksi">Tambah Transaksi</string>
     <string name="data_kosong">Data masih kosong</string>
 </resources>
