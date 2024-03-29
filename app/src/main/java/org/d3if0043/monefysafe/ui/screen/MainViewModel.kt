@@ -13,7 +13,7 @@ class MainViewModel : ViewModel() {
                     i.toInt(),
                     "Ini ke-$i",
                     "Pemasukan",
-                    "gatau"
+                    "$i/03/2024"
                 )
             )
         }
