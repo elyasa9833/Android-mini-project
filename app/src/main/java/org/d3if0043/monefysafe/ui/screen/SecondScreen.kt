@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -34,15 +38,29 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if0043.monefysafe.R
 import org.d3if0043.monefysafe.ui.theme.MonefySafeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondScreen(){
+fun SecondScreen(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
+
+                        )
+                    }
+                },
                 title = {
                     Text(text = stringResource(id = R.string.app_name))
                 },
@@ -51,7 +69,7 @@ fun SecondScreen(){
                     titleContentColor = MaterialTheme.colorScheme.primary
                 )
             )
-        }
+        },
     ) {padding ->
         InputContent(Modifier.padding(padding))
 
@@ -150,6 +168,6 @@ fun transactionTypes(label: String, isSelected: Boolean, modifier: Modifier){
 @Composable
 fun SecondPreview() {
     MonefySafeTheme {
-        SecondScreen()
+        SecondScreen(rememberNavController())
     }
 }

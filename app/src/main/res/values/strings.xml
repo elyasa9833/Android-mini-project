@@ -3,6 +3,7 @@
     <string name="teks_x">Jumlah Uang: %1$d \nKeterangan: %2$s \nTipe Transaksi: %3$s</string>
     <string name="deposit">Deposit</string>
     <string name="withdraw">Withdraw</string>
+    <string name="kembali">Kembali</string>
     <string name="tambah_transaksi">Tambah Transaksi</string>
     <string name="data_kosong">Data masih kosong</string>
 </resources>

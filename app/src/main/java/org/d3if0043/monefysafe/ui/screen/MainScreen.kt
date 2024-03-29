@@ -26,13 +26,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.d3if0043.monefysafe.R
 import org.d3if0043.monefysafe.model.Transaksi
+import org.d3if0043.monefysafe.navigation.Screen
 import org.d3if0043.monefysafe.ui.theme.MonefySafeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(){
+fun MainScreen(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -47,7 +50,7 @@ fun MainScreen(){
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                /*TODO*/
+                navController.navigate(Screen.Second.route)
             }) {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -112,6 +115,6 @@ fun ListItem(transaksi: Transaksi){
 @Composable
 fun GreetingPreview() {
     MonefySafeTheme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }
