@@ -12,12 +12,12 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -58,19 +58,19 @@ fun MainScreen(navController: NavHostController){
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
-                )
+                ),
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.Second.route)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Email,
+                            contentDescription = stringResource(id = R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Screen.Second.route)
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = stringResource(id = R.string.tambah_transaksi),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
         }
     ) {padding ->
         InputContent(Modifier.padding(padding))
@@ -97,7 +97,7 @@ fun InputContent(modifier: Modifier){
         OutlinedTextField(
             value = jumlahUang,
             onValueChange = {jumlahUang = it},
-            label = { Text(stringResource(id = R.string.jumlah)) },
+            label = { Text(stringResource(id = R.string.nominal)) },
             isError = jumlahError,
             leadingIcon = { Text(text = stringResource(id = R.string.leadIcon)) },
             trailingIcon = { IconPicker(isError = jumlahError) },
@@ -127,7 +127,7 @@ fun InputContent(modifier: Modifier){
                 .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
         ){
             radioOption.forEach { text ->
-                transactionTypes(
+                TransactionTypes(
                     label = text,
                     isSelected = type == text,
                     modifier = Modifier
@@ -145,7 +145,7 @@ fun InputContent(modifier: Modifier){
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
-                jumlahError = (jumlahUang == "" || jumlahUang == "0")
+                jumlahError = (jumlahUang == "" || jumlahUang == "0" || jumlahUang.toIntOrNull() == null)
                 if(jumlahError) return@Button
 
                 hasil = jumlahUang.toInt()
@@ -162,7 +162,7 @@ fun InputContent(modifier: Modifier){
 }
 
 @Composable
-fun transactionTypes(label: String, isSelected: Boolean, modifier: Modifier){
+fun TransactionTypes(label: String, isSelected: Boolean, modifier: Modifier){
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
