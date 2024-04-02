@@ -1,14 +1,27 @@
 package org.d3if0043.monefysafe.ui.screen
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.d3if0043.monefysafe.model.Transaksi
 
 class MainViewModel : ViewModel() {
-    val data = getDataTransaksi()
-    private fun getDataTransaksi() : List<Transaksi>{
-    val data = mutableListOf<Transaksi>()
+    private val _data = MutableLiveData<List<Transaksi>>()
+    val data: LiveData<List<Transaksi>> = _data
+
+    init {
+        _data.value = getDataDummy()
+    }
+
+    fun addData(newTransaksi: Transaksi) {
+        val updatedList = _data.value.orEmpty() + newTransaksi
+        _data.value = updatedList
+    }
+
+    private fun getDataDummy() : List<Transaksi>{
+        val dataTransaksi = mutableListOf<Transaksi>()
         for (i in 1 until 10){
-            data.add(
+            dataTransaksi.add(
                 Transaksi(
                     i.toInt(),
                     "Ini ke-$i",
@@ -17,6 +30,7 @@ class MainViewModel : ViewModel() {
                 )
             )
         }
-        return data
+        return dataTransaksi
     }
+
 }

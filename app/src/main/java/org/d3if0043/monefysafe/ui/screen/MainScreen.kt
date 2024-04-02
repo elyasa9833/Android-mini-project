@@ -27,7 +27,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -40,11 +39,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if0043.monefysafe.R
+import org.d3if0043.monefysafe.model.Transaksi
 import org.d3if0043.monefysafe.navigation.Screen
 import org.d3if0043.monefysafe.ui.theme.MonefySafeTheme
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,10 +86,11 @@ fun InputContent(modifier: Modifier){
         stringResource(id = R.string.deposit),
         stringResource(id = R.string.withdraw)
     )
+    val viewModel: MainViewModel = viewModel()
 
     var type by rememberSaveable { mutableStateOf(radioOption[0]) }
     var jumlahUang by rememberSaveable { mutableStateOf("") }
-    var hasil by rememberSaveable { mutableIntStateOf(0) }
+    var hasil by rememberSaveable { mutableStateOf(false) }
     var jumlahError by rememberSaveable { mutableStateOf(false) }
     var keterangan by rememberSaveable { mutableStateOf("") }
 
@@ -141,14 +144,20 @@ fun InputContent(modifier: Modifier){
                 )
             }
         }
-        Text(text = hasil.toString())
+        if(hasil){
+            Text(text = "Berhasil ditambahkan")
+        }
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
                 jumlahError = (jumlahUang == "" || jumlahUang == "0" || jumlahUang.toIntOrNull() == null)
                 if(jumlahError) return@Button
 
-                hasil = jumlahUang.toInt()
+                if(keterangan == "") keterangan = " - "
+                viewModel.addData(
+                    Transaksi(jumlahUang.toInt(), keterangan, type, getCurrentDate() )
+                )
+                hasil = true
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,6 +168,15 @@ fun InputContent(modifier: Modifier){
         }
 
     }
+}
+
+fun getCurrentDate(): String {
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH) + 1 // Januari dimulai dari 0
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    return "$day/$month/$year" // format "dd/mm/yyyy"
 }
 
 @Composable

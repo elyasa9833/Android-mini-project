@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -70,9 +72,9 @@ fun SecondScreen(navController: NavHostController){
 @Composable
 fun ScreenContent(modifier: Modifier){
     val viewModel: MainViewModel = viewModel()
-    val data =  viewModel.data
+    val transaksiList by viewModel.data.observeAsState(initial = emptyList())
 
-    if(data.isEmpty()){
+    if(transaksiList.isEmpty()){
         Column (
             modifier = modifier
                 .fillMaxSize()
@@ -87,11 +89,10 @@ fun ScreenContent(modifier: Modifier){
             modifier = modifier
                 .fillMaxSize()
         ){
-            itemsIndexed(data){ index, item ->
+            itemsIndexed(transaksiList) { index, item ->
                 ListItem(transaksi = item, indeks = index)
                 Divider()
             }
-
         }
 
     }
@@ -118,7 +119,7 @@ fun ListItem(transaksi: Transaksi, indeks: Int){
         ){
             Text(
                 text = stringResource(id = R.string.history_x,
-                    transaksi.Jenis, transaksi.Jumlah, transaksi.keterangan, transaksi.tanggal)
+                    transaksi.jenis, transaksi.jumlah, transaksi.keterangan, transaksi.tanggal)
             )
         }
     }
