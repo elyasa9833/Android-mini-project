@@ -1,6 +1,7 @@
 package org.d3if0043.monefysafe.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -85,13 +88,24 @@ fun ScreenContent(modifier: Modifier){
             Text(text = stringResource(id = R.string.data_kosong))
         }
     }else{
-        LazyColumn(
+        Column(
             modifier = modifier
                 .fillMaxSize()
-        ){
-            itemsIndexed(transaksiList) { index, item ->
-                ListItem(transaksi = item, indeks = index)
-                Divider()
+
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.banner_image),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            Divider(thickness = 4.dp)
+            LazyColumn(){
+                itemsIndexed(transaksiList) { index, item ->
+                    ListItem(transaksi = item, indeks = index)
+                    Divider()
+                }
             }
         }
 
@@ -102,7 +116,7 @@ fun ScreenContent(modifier: Modifier){
 fun ListItem(transaksi: Transaksi, indeks: Int){
     Row (
         modifier = Modifier
-            .padding(16.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
 
     ){
