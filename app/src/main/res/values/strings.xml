@@ -1,16 +1,24 @@
 <resources>
     <string name="app_name">Monefy Safe</string>
-    <string name="teks_x">Jumlah Uang: %1$d \nKeterangan: %2$s \nTipe Transaksi: %3$s</string>
-    <string name="deposit">Deposit</string>
-    <string name="withdraw">Withdraw</string>
+    <string name="deposit">Pemasukan</string>
+    <string name="withdraw">Pengeluaran</string>
     <string name="kembali">Kembali</string>
+    <string name="notifikasi">Notifikasi</string>
+    <string name="kosongkan">Kosongkan</string>
+    <string name="simpan">Simpan</string>
+    <string name="banner_text">Gambar Banner</string>
+    <string name="bagikan">Bagikan</string>
     <string name="nominal">Nominal</string>
-    <string name="history">History</string>
+    <string name="history">Riwayat</string>
     <string name="keterangan">Keterangan (opsional)</string>
     <string name="leadIcon">Rp. </string>
-    <string name="jumlah_error">Data tidak boleh kosong</string>
     <string name="invalid_input">Data tidak boleh kosong</string>
     <string name="tambah_transaksi">Tambah Transaksi</string>
     <string name="data_kosong">Data masih kosong</string>
-    <string name="history_x">Jenis Transaksi: %1$s \nJumlah uang: Rp %2$d \nKeterangan: %3$s  \nTanggal: %4$s</string>
+    <string name="_jenis_transaksi">Jenis Transaksi: %1$s</string>
+    <string name="_jumlah">Jumlah: Rp %1$s</string>
+    <string name="_keterangan">Keterangan: %1$s</string>
+    <string name="_tanggal">Tanggal: %1$s</string>
+    <string name="history_x">Jenis Transaksi: %1$s \nJumlah uang: Rp %2$.2f \nKeterangan: %3$s  \nTanggal: %4$s</string>
+    <string name="bagikan_x">Jenis Transaksi: %1$s \nJumlah uang: Rp %2$.2f \nKeterangan: %3$s  \nTanggal: %4$s</string>
 </resources>

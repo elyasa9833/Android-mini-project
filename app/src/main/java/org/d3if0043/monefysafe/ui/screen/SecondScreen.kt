@@ -95,7 +95,7 @@ fun ScreenContent(modifier: Modifier){
         ) {
             Image(
                 painter = painterResource(id = R.drawable.banner_image),
-                contentDescription = "",
+                contentDescription = stringResource(id = R.string.banner_text),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,7 +133,7 @@ fun ListItem(transaksi: Transaksi, indeks: Int){
         ){
             Text(
                 text = stringResource(id = R.string.history_x,
-                    transaksi.jenis, transaksi.jumlah, transaksi.keterangan, transaksi.tanggal)
+                    transaksi.jenis, transaksi.jumlah.toFloat(), transaksi.keterangan, transaksi.tanggal)
             )
         }
     }
