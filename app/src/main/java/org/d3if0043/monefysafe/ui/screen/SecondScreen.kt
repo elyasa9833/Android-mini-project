@@ -27,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -93,14 +94,7 @@ fun ScreenContent(modifier: Modifier){
                 .fillMaxSize()
 
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.banner_image),
-                contentDescription = stringResource(id = R.string.banner_text),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-            Divider(thickness = 4.dp)
+            ResponsiveImage()
             LazyColumn(){
                 itemsIndexed(transaksiList) { index, item ->
                     ListItem(transaksi = item, indeks = index)
@@ -139,6 +133,23 @@ fun ListItem(transaksi: Transaksi, indeks: Int){
     }
 
 }
+
+@Composable
+fun ResponsiveImage() {
+    val configuration = LocalConfiguration.current
+
+    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        Image(
+            painter = painterResource(id = R.drawable.banner_image),
+            contentDescription = stringResource(id = R.string.banner_text),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        Divider(thickness = 4.dp)
+    }
+}
+
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

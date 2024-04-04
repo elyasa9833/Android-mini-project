@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Warning
@@ -36,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -93,6 +96,7 @@ fun InputContent(modifier: Modifier){
     val viewModel: MainViewModel = viewModel()
     val lastItem = viewModel.data.value?.lastOrNull()
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
 
     var type by rememberSaveable { mutableStateOf(radioOption[0]) }
     var jumlahUang by rememberSaveable { mutableStateOf("") }
@@ -101,7 +105,10 @@ fun InputContent(modifier: Modifier){
     var keterangan by rememberSaveable { mutableStateOf("") }
 
     Column(
-        modifier = modifier.padding(16.dp)
+        modifier = if(configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            modifier.padding(16.dp).verticalScroll(rememberScrollState())
+            else modifier.padding(16.dp)
+
     ) {
         OutlinedTextField(
             value = jumlahUang,
@@ -154,61 +161,64 @@ fun InputContent(modifier: Modifier){
             Column (
                 modifier = Modifier.padding(top = 16.dp)
             ){
-
                 Divider()
                 Text(text = stringResource(id = R.string._jenis_transaksi, lastItem?.jenis.toString()))
                 Text(text = stringResource(id = R.string._jumlah, lastItem?.jumlah.toString()))
                 Text(text = stringResource(id = R.string._keterangan, lastItem?.keterangan.toString()))
                 Text(text = stringResource(id = R.string._tanggal, lastItem?.tanggal.toString()))
-
-                Spacer(modifier = Modifier.weight(1f))
-                Row {
-                    Button(
-                        onClick = { hasil = false },
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .fillMaxWidth(0.5f),
-                        contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-                    ) {
-                        Text(text = stringResource(id = R.string.kosongkan))
-                    }
-                    Button(
-                        onClick = {
-                            shareData(
-                                context = context,
-                                message = context.getString(R.string.bagikan_x,
-                                    lastItem?.jenis.toString(), lastItem?.jumlah?.toFloat(),
-                                    lastItem?.keterangan.toString(), lastItem?.tanggal.toString())
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
-
-                    ) {
-                        Text(text = stringResource(id = R.string.bagikan))
-                    }
-
-                }
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = {
-                jumlahError = (jumlahUang == "" || jumlahUang == "0" || jumlahUang.toIntOrNull() == null)
-                if(jumlahError) return@Button
 
-                viewModel.addData(
-                    Transaksi(jumlahUang.toInt(), if(keterangan == "") "-" else keterangan, type, getCurrentDate() )
-                )
-                hasil = true
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-        ) {
-            Text(text = stringResource(id = R.string.simpan))
+        Spacer(modifier = Modifier.weight(1f))
+        if(!hasil){
+            Button(
+                onClick = {
+                    jumlahError = (jumlahUang == "" || jumlahUang == "0" || jumlahUang.toIntOrNull() == null)
+                    if(jumlahError) return@Button
+
+                    viewModel.addData(
+                        Transaksi(jumlahUang.toInt(), if(keterangan == "") "-" else keterangan, type, getCurrentDate() )
+                    )
+                    hasil = true
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(id = R.string.simpan))
+            }
+        }else{
+            Row (
+                modifier = Modifier.padding(top = 32.dp)
+            ){
+                Button(
+                    onClick = { hasil = false },
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .fillMaxWidth(0.5f),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+                ) {
+                    Text(text = stringResource(id = R.string.kosongkan))
+                }
+                Button(
+                    onClick = {
+                        shareData(
+                            context = context,
+                            message = context.getString(R.string.bagikan_x,
+                                lastItem?.jenis.toString(), lastItem?.jumlah?.toFloat(),
+                                lastItem?.keterangan.toString(), lastItem?.tanggal.toString())
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
+
+                    ) {
+                    Text(text = stringResource(id = R.string.bagikan))
+                }
+
+            }
         }
 
     }
