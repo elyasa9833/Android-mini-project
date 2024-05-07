@@ -20,4 +20,6 @@
     <string name="_tanggal">Date: %1$s</string>
     <string name="history_x">Transaction method: %1$s \nAmount: $ %2$.2f \nAdditional information: %3$s \nDate: %4$s</string>
     <string name="bagikan_x">Transaction method: %1$s \nAmount: $ %2$.2f \nAdditional information: %3$s \nDate: %4$s</string>
+    <string name="tambah_transaksi">Add Transaction</string>
+    <string name="tambah_error">Cannot add Transactions yet</string>
 </resources>

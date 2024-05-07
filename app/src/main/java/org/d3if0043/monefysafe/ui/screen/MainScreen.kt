@@ -3,6 +3,7 @@ package org.d3if0043.monefysafe.ui.screen
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,7 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -38,8 +40,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
@@ -61,8 +65,20 @@ fun MainScreen(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
+
+                        )
+                    }
+                },
                 title = {
-                    Text(text = stringResource(id = R.string.app_name))
+                    Text(text = stringResource(id = R.string.tambah_transaksi))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -70,11 +86,11 @@ fun MainScreen(navController: NavHostController){
                 ),
                 actions = {
                     IconButton(onClick = {
-                        navController.navigate(Screen.Second.route)
+                        navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.Filled.Notifications,
-                            contentDescription = stringResource(id = R.string.notifikasi),
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = stringResource(id = R.string.simpan),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -82,25 +98,23 @@ fun MainScreen(navController: NavHostController){
             )
         }
     ) {padding ->
-        InputContent(Modifier.padding(padding))
+        InputContent(navController, Modifier.padding(padding))
 
     }
 }
 
 @Composable
-fun InputContent(modifier: Modifier){
+fun InputContent(navController: NavHostController, modifier: Modifier){
     val radioOption = listOf(
         stringResource(id = R.string.deposit),
         stringResource(id = R.string.withdraw)
     )
     val viewModel: MainViewModel = viewModel()
-    val lastItem = viewModel.data.value?.lastOrNull()
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
 
     var type by rememberSaveable { mutableStateOf(radioOption[0]) }
     var jumlahUang by rememberSaveable { mutableStateOf("") }
-    var hasil by rememberSaveable { mutableStateOf(false) }
     var jumlahError by rememberSaveable { mutableStateOf(false) }
     var keterangan by rememberSaveable { mutableStateOf("") }
 
@@ -157,70 +171,26 @@ fun InputContent(modifier: Modifier){
                 )
             }
         }
-        if(hasil){
-            Column (
-                modifier = Modifier.padding(top = 16.dp)
-            ){
-                Divider()
-                Text(text = stringResource(id = R.string._jenis_transaksi, lastItem?.jenis.toString()))
-                Text(text = stringResource(id = R.string._jumlah, lastItem?.jumlah.toString()))
-                Text(text = stringResource(id = R.string._keterangan, lastItem?.keterangan.toString()))
-                Text(text = stringResource(id = R.string._tanggal, lastItem?.tanggal.toString()))
-            }
-        }
+        ResponsiveImage()
 
         Spacer(modifier = Modifier.weight(1f))
-        if(!hasil){
-            Button(
-                onClick = {
-                    jumlahError = (jumlahUang == "" || jumlahUang == "0" || jumlahUang.toIntOrNull() == null)
-                    if(jumlahError) return@Button
+        Button(
+            onClick = {
+                jumlahError = (jumlahUang == "" || jumlahUang == "0" || jumlahUang.toIntOrNull() == null)
+                if(jumlahError) return@Button
 
-                    viewModel.addData(
-                        Transaksi(jumlahUang.toInt(), if(keterangan == "") "-" else keterangan, type, getCurrentDate() )
-                    )
-                    hasil = true
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-            ) {
-                Text(text = stringResource(id = R.string.simpan))
-            }
-        }else{
-            Row (
-                modifier = Modifier.padding(top = 32.dp)
-            ){
-                Button(
-                    onClick = { hasil = false },
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .fillMaxWidth(0.5f),
-                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-                ) {
-                    Text(text = stringResource(id = R.string.kosongkan))
-                }
-                Button(
-                    onClick = {
-                        shareData(
-                            context = context,
-                            message = context.getString(R.string.bagikan_x,
-                                lastItem?.jenis.toString(), lastItem?.jumlah?.toFloat(),
-                                lastItem?.keterangan.toString(), lastItem?.tanggal.toString())
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp),
-
-                    ) {
-                    Text(text = stringResource(id = R.string.bagikan))
-                }
-
-            }
+                viewModel.addData(
+                    Transaksi(jumlahUang.toInt(), if(keterangan == "") "-" else keterangan, type, getCurrentDate() )
+                )
+                navController.navigate(Screen.Second.route)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.simpan))
         }
-
     }
 }
 
@@ -269,6 +239,23 @@ fun IconPicker(isError: Boolean){
 @Composable
 fun ErrorHint(isError: Boolean){
     if(isError) Text(text = stringResource(id = R.string.invalid_input))
+}
+
+@Composable
+fun ResponsiveImage() {
+    val configuration = LocalConfiguration.current
+
+    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        Image(
+            painter = painterResource(id = R.drawable.banner_image),
+            contentDescription = stringResource(id = R.string.banner_text),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+        Divider(thickness = 4.dp)
+    }
 }
 
 @Preview(showBackground = true)

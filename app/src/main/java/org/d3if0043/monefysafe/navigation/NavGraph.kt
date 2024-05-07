@@ -12,7 +12,7 @@ import org.d3if0043.monefysafe.ui.screen.SecondScreen
 fun SetupNavGraph(navController: NavHostController = rememberNavController()){
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Second.route
     ){
         composable(route = Screen.Home.route){
             MainScreen(navController)
