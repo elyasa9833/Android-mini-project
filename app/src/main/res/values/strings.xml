@@ -26,4 +26,7 @@
     <string name="invalid">Amount cannot be empty.</string>
     <string name="lainnya">More options</string>
     <string name="hapus">Delete Transaction</string>
+    <string name="pesan_hapus">Delete this transaction?</string>
+    <string name="tombol_hapus">Delete</string>
+    <string name="tombol_batal">Cancel</string>
 </resources>

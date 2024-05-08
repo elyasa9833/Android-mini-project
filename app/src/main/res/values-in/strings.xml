@@ -27,4 +27,7 @@
     <string name="invalid">Jumlah tidak boleh kosong.</string>
     <string name="lainnya">Opsi lainnya</string>
     <string name="hapus">Hapus Transaksi</string>
+    <string name="pesan_hapus">Hapus catatan ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
 </resources>

@@ -71,6 +71,7 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
     var jumlahUang by rememberSaveable { mutableStateOf("") }
     var keterangan by rememberSaveable { mutableStateOf("") }
     var tipeTransaksi by rememberSaveable { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(true) {
         if (id == null) return@LaunchedEffect
@@ -125,7 +126,12 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
                         )
                     }
                     if(id != null) {
-                        DeleteAction {
+                        DeleteAction {showDialog = true }
+                        DisplayAlertDialog(
+                            openDialog = showDialog,
+                            onDismissRequest = { showDialog = false }
+                        ) {
+                            showDialog = false
                             viewModel.delete(id)
                             navController.popBackStack()
                         }
