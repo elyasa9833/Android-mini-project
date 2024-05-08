@@ -23,8 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,9 +36,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if0043.monefysafe.R
+import org.d3if0043.monefysafe.database.TransaksiDb
 import org.d3if0043.monefysafe.model.Transaksi
 import org.d3if0043.monefysafe.navigation.Screen
 import org.d3if0043.monefysafe.ui.theme.MonefySafeTheme
+import org.d3if0043.monefysafe.util.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,8 +78,11 @@ fun SecondScreen(navController: NavHostController){
 
 @Composable
 fun ScreenContent(navController: NavHostController,modifier: Modifier){
-    val viewModel: MainViewModel = viewModel()
-    val transaksiList by viewModel.data.observeAsState(initial = emptyList())
+    val context = LocalContext.current
+    val db = TransaksiDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: MainViewModel = viewModel(factory = factory)
+    val transaksiList by viewModel.data.collectAsState()
 
     if(transaksiList.isEmpty()){
         Column (

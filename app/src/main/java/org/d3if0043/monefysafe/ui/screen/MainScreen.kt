@@ -1,6 +1,7 @@
 package org.d3if0043.monefysafe.ui.screen
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -43,16 +45,24 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if0043.monefysafe.R
+import org.d3if0043.monefysafe.database.TransaksiDb
 import org.d3if0043.monefysafe.ui.theme.MonefySafeTheme
+import org.d3if0043.monefysafe.util.ViewModelFactory
 
 const val KEY_ID_TRANSAKSI = "id_transaksi"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController, id: Long? = null){
+    val context = LocalContext.current
+    val db = TransaksiDb.getInstance(context)
+    val factory = ViewModelFactory(db.dao)
+    val viewModel: DetailViewModel = viewModel(factory = factory)
+
     var jumlahUang by rememberSaveable { mutableStateOf("") }
     var keterangan by rememberSaveable { mutableStateOf("") }
     var tipeTransaksi by rememberSaveable { mutableStateOf("") }
@@ -84,6 +94,13 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
                 ),
                 actions = {
                     IconButton(onClick = {
+                        if(jumlahUang == ""){
+                            Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
+                            return@IconButton
+                        }
+                        if(id == null){
+                            viewModel.insert(jumlahUang, keterangan, tipeTransaksi)
+                        }
                         navController.popBackStack()
                     }) {
                         Icon(
