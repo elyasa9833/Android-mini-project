@@ -23,6 +23,7 @@ class MainViewModel : ViewModel() {
         for (i in 1 until 10){
             dataTransaksi.add(
                 Transaksi(
+                    i.toLong(),
                     i.toInt(),
                     "Ini ke-$i",
                     "Pemasukan",

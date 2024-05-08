@@ -23,4 +23,5 @@
     <string name="bagikan_x">Jenis transaksi: %1$s \nJumlah: $ %2$.2f \nKeterangan: %3$s \nTanggal: %4$s</string>
     <string name="tambah_transaksi">Tambah Transaksi</string>
     <string name="tambah_error">Belum bisa tambah Transaksi</string>
+    <string name="edit_transaksi">Ubah Transaksi</string>
 </resources>

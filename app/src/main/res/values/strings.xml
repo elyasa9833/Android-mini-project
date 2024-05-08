@@ -22,4 +22,5 @@
     <string name="bagikan_x">Transaction method: %1$s \nAmount: $ %2$.2f \nAdditional information: %3$s \nDate: %4$s</string>
     <string name="tambah_transaksi">Add Transaction</string>
     <string name="tambah_error">Cannot add Transactions yet</string>
+    <string name="edit_transaksi">Edit Transaction</string>
 </resources>
