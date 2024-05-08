@@ -24,4 +24,6 @@
     <string name="tambah_error">Cannot add Transactions yet</string>
     <string name="edit_transaksi">Edit Transaction</string>
     <string name="invalid">Amount cannot be empty.</string>
+    <string name="lainnya">More options</string>
+    <string name="hapus">Delete Transaction</string>
 </resources>
