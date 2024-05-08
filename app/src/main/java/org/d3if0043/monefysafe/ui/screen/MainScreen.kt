@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -67,6 +68,14 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
     var keterangan by rememberSaveable { mutableStateOf("") }
     var tipeTransaksi by rememberSaveable { mutableStateOf("") }
 
+    LaunchedEffect(true) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getTransaksi(id) ?: return@LaunchedEffect
+        jumlahUang = data.jumlah.toString()
+        keterangan = data.keterangan
+        tipeTransaksi = data.jenis
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -100,6 +109,8 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
                         }
                         if(id == null){
                             viewModel.insert(jumlahUang, keterangan, tipeTransaksi)
+                        }else{
+                            viewModel.update(id, jumlahUang, keterangan, tipeTransaksi)
                         }
                         navController.popBackStack()
                     }) {

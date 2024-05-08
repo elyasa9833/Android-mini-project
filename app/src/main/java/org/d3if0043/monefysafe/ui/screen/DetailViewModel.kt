@@ -25,4 +25,21 @@ class DetailViewModel(private val dao: TransaksiDao) : ViewModel() {
             dao.insert(transaksi)
         }
     }
+
+    fun update(id: Long, jumlah: String, keterangan: String, jenis: String) {
+        val transaksi = Transaksi(
+            id = id,
+            jumlah = jumlah.toInt(),
+            keterangan = keterangan,
+            jenis = jenis,
+            tanggal = formatter.format(System.currentTimeMillis())
+        )
+
+        viewModelScope.launch {
+            dao.update(transaksi)
+        }
+    }
+    suspend fun getTransaksi(id: Long): Transaksi? {
+        return dao.getTransaksiById(id)
+    }
 }

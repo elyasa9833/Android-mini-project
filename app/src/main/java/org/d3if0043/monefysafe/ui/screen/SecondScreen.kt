@@ -45,8 +45,6 @@ import org.d3if0043.monefysafe.util.ViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecondScreen(navController: NavHostController){
-    val context = LocalContext.current
-
     Scaffold(
         topBar = {
             TopAppBar(
