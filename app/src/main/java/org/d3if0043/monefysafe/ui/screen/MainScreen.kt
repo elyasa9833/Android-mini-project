@@ -73,7 +73,10 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
                     }
                 },
                 title = {
-                    Text(text = stringResource(id = R.string.tambah_transaksi))
+                    if(id == null)
+                        Text(text = stringResource(id = R.string.tambah_transaksi))
+                    else
+                        Text(text = stringResource(id = R.string.edit_transaksi))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,

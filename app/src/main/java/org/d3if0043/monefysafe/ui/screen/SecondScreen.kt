@@ -1,6 +1,7 @@
 package org.d3if0043.monefysafe.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,13 +69,13 @@ fun SecondScreen(navController: NavHostController){
             }
         }
     ) {padding ->
-        ScreenContent(Modifier.padding(padding))
+        ScreenContent(navController, Modifier.padding(padding))
 
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier){
+fun ScreenContent(navController: NavHostController,modifier: Modifier){
     val viewModel: MainViewModel = viewModel()
     val transaksiList by viewModel.data.observeAsState(initial = emptyList())
 
@@ -94,7 +95,9 @@ fun ScreenContent(modifier: Modifier){
             contentPadding = PaddingValues(bottom = 84.dp)
         ){
             itemsIndexed(transaksiList) { index, item ->
-                ListItem(transaksi = item, indeks = index)
+                ListItem(transaksi = item, indeks = index) {
+                    navController.navigate(Screen.FormUbah.withId(item.id))
+                }
                 Divider()
             }
         }
@@ -102,10 +105,11 @@ fun ScreenContent(modifier: Modifier){
 }
 
 @Composable
-fun ListItem(transaksi: Transaksi, indeks: Int){
+fun ListItem(transaksi: Transaksi, indeks: Int, onClick: () -> Unit){
     Row (
         modifier = Modifier
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
 
     ){
