@@ -108,7 +108,7 @@ fun MainScreen(navController: NavHostController, id: Long? = null){
                 ),
                 actions = {
                     IconButton(onClick = {
-                        if(jumlahUang == ""){
+                        if(tipeTransaksi == "" || jumlahUang.toIntOrNull() == null){
                             Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
